@@ -1,3 +1,5 @@
+// const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const fs = require('fs');
 const puppeteer = require('puppeteer');
 
 (async () => {
@@ -17,7 +19,19 @@ const puppeteer = require('puppeteer');
     
     )
 
-    console.log(essays)
+    const cleanedArray = essays.filter((e) => e.title != ''); // filter data to delete some trash 
+
+    const array = cleanedArray.map((item) => item.title) // put titles in on single array []
+
+    const csvContent = array.join('\n'); // create csv file and put it all titles 
+
+    fs.writeFile('output.csv', csvContent, (err) => {
+        if (err) {
+          console.error('Error writing CSV file', err);
+        } else {
+          console.log('CSV file written successfully');
+        }
+      });
 
     await browser.close()
 
